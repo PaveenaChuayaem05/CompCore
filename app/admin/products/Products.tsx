@@ -8,7 +8,7 @@ import useSWR from 'swr'
 import useSWRMutation from 'swr/mutation'
 
 export default function Products() {
-  const { data: products, error } = useSWR(`/api/admin/products`)
+  const { data: products, error } = useSWR<Product[]>(`/api/admin/products`) // Specify the type for products
   const router = useRouter()
 
   const { trigger: deleteProduct } = useSWRMutation(
@@ -98,7 +98,15 @@ export default function Products() {
                   </Link>
                   &nbsp;
                   <button
-                    onClick={() => deleteProduct({ productId: product._id })}
+                    onClick={() => {
+                      const productId = product._id // Assign to a variable
+                      if (productId) {
+                        // Check if it's defined
+                        deleteProduct({ productId })
+                      } else {
+                        toast.error('Product ID is undefined. Cannot delete.')
+                      }
+                    }}
                     type="button"
                     className="btn btn-ghost btn-sm"
                   >

@@ -21,9 +21,10 @@ const Form = () => {
     clear,
   } = useCartService()
 
+  // Remove 'url' from the function signature
   const { trigger: placeOrder, isMutating: isPlacing } = useSWRMutation(
     `/api/orders/mine`,
-    async (url) => {
+    async () => {
       const res = await fetch('/api/orders', {
         method: 'POST',
         headers: {

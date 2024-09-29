@@ -7,16 +7,10 @@ import toast from 'react-hot-toast'
 import useSWR from 'swr'
 import useSWRMutation from 'swr/mutation'
 
-export default function OrderDetails({
-  orderId,
-}: // paypalClientId, // Remove this line if not used
-{
-  orderId: string
-  // paypalClientId: string // Remove this line if not used
-}) {
+export default function OrderDetails({ orderId }: { orderId: string }) {
   const { trigger: deliverOrder, isMutating: isDelivering } = useSWRMutation(
     `/api/orders/${orderId}`,
-    async (url) => {
+    async () => {
       const res = await fetch(`/api/admin/orders/${orderId}/deliver`, {
         method: 'PUT',
         headers: {
@@ -111,7 +105,7 @@ export default function OrderDetails({
                             height={50}
                           ></Image>
                           <span className="px-2">
-                            {item.name} ({item.color} {item.size})
+                            {item.name} ({item.colors})
                           </span>
                         </Link>
                       </td>

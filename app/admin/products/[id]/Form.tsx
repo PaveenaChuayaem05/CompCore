@@ -10,7 +10,9 @@ import { formatId } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
 
 export default function ProductEditForm({ productId }: { productId: string }) {
-  const { data: product, error } = useSWR(`/api/admin/products/${productId}`)
+  const { data: product, error } = useSWR<Product>(
+    `/api/admin/products/${productId}`
+  )
   const router = useRouter()
   const { trigger: updateProduct, isMutating: isUpdating } = useSWRMutation(
     `/api/admin/products/${productId}`,
@@ -49,7 +51,7 @@ export default function ProductEditForm({ productId }: { productId: string }) {
     setValue('description', product.description)
   }, [product, setValue])
 
-  const formSubmit = async (formData: any) => {
+  const formSubmit = async (formData: Product) => {
     await updateProduct(formData)
   }
 
@@ -88,14 +90,14 @@ export default function ProductEditForm({ productId }: { productId: string }) {
     </div>
   )
 
-  const uploadHandler = async (e: any) => {
+  const uploadHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const toastId = toast.loading('Uploading image...')
     try {
       const resSign = await fetch('/api/cloudinary-sign', {
         method: 'POST',
       })
       const { signature, timestamp } = await resSign.json()
-      const file = e.target.files[0]
+      const file = e.target.files![0] // Use non-null assertion since we check if files exist
       const formData = new FormData()
       formData.append('file', file)
       formData.append('signature', signature)
@@ -113,8 +115,11 @@ export default function ProductEditForm({ productId }: { productId: string }) {
       toast.success('File uploaded successfully', {
         id: toastId,
       })
-    } catch (err: any) {
-      toast.error(err.message, {
+    } catch (err: unknown) {
+      // Specify the type for err if necessary
+      const errorMessage =
+        (err as { message?: string })?.message || 'An error occurred'
+      toast.error(errorMessage, {
         id: toastId,
       })
     }
@@ -155,7 +160,7 @@ export default function ProductEditForm({ productId }: { productId: string }) {
             {isUpdating && <span className="loading loading-spinner"></span>}
             Update
           </button>
-          <Link className="btn ml-4 " href="/admin/products">
+          <Link className="btn ml-4" href="/admin/products">
             Cancel
           </Link>
         </form>

@@ -1,21 +1,23 @@
 'use client'
 import { Order } from '@/lib/models/OrderModel'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import useSWR from 'swr'
 
 export default function MyOrders() {
-  const router = useRouter()
   const { data: orders, error } = useSWR(`/api/orders/mine`)
 
   const [mounted, setMounted] = useState(false)
+
   useEffect(() => {
     setMounted(true)
   }, [])
 
   if (!mounted) return <></>
-  if (error) return 'An error has occurred.'
+  if (error) {
+    console.error('Error fetching orders:', error)
+    return 'An error has occurred.'
+  }
   if (!orders) return 'Loading...'
 
   return (
