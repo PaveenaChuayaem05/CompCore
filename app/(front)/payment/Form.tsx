@@ -1,14 +1,14 @@
 'use client'
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import CheckoutSteps from '@/components/CheckoutSteps'
 import useCartService from '@/lib/hooks/useCartStore'
-import { CheckoutSteps } from '@/components/CheckoutSteps'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
 const Form = () => {
   const router = useRouter()
   const { savePaymentMethod, paymentMethod, shippingAddress } = useCartService()
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('')
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     savePaymentMethod(selectedPaymentMethod)
     router.push('/place-order')
@@ -18,33 +18,29 @@ const Form = () => {
     if (!shippingAddress.address) {
       return router.push('/shipping')
     }
-    setSelectedPaymentMethod(paymentMethod || 'Bank')
+    setSelectedPaymentMethod(paymentMethod || 'CashOnDelivery')
   }, [paymentMethod, router, shippingAddress.address])
 
   return (
     <div>
       <CheckoutSteps current={2} />
-
       <div className="max-w-sm mx-auto card bg-base-300 my-4">
         <div className="card-body">
           <h1 className="card-title">Payment Method</h1>
           <form onSubmit={handleSubmit}>
-            {['Bank', 'CashOnDelivery'].map((payment) => (
-              <div key={payment}>
-                <label className="label cursor-pointer">
-                  <span className="label-text">{payment}</span>
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    className="radio"
-                    value={payment}
-                    checked={selectedPaymentMethod === payment}
-                    onChange={() => setSelectedPaymentMethod(payment)}
-                  />
-                </label>
-              </div>
-            ))}
-
+            <div>
+              <label className="label cursor-pointer">
+                <span className="label-text">Cash On Delivery</span>
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  className="radio"
+                  value="CashOnDelivery"
+                  checked={selectedPaymentMethod === 'CashOnDelivery'}
+                  onChange={() => setSelectedPaymentMethod('CashOnDelivery')}
+                />
+              </label>
+            </div>
             <div className="my-2">
               <button type="submit" className="btn btn-primary w-full">
                 Next
@@ -65,5 +61,4 @@ const Form = () => {
     </div>
   )
 }
-
 export default Form

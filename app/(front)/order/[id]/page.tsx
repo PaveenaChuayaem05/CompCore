@@ -6,6 +6,14 @@ export function generateMetadata({ params }: { params: { id: string } }) {
   }
 }
 
-export default function OrderHistory({ params }: { params: { id: string } }) {
-  return <OrderDetails orderId={params.id} />
+export default function OrderDetailsPage({
+  params,
+}: {
+  params: { id: string }
+}) {
+  return (
+    <OrderDetails
+      orderId={params.id}
+    />
+  )
 }

@@ -17,6 +17,7 @@ const calcPrices = (orderItems: OrderItem[]) => {
   const totalPrice = round2(itemsPrice + shippingPrice + taxPrice)
   return { itemsPrice, shippingPrice, taxPrice, totalPrice }
 }
+
 export const POST = auth(async (req: any) => {
   if (!req.auth) {
     return Response.json(
@@ -42,6 +43,7 @@ export const POST = auth(async (req: any) => {
       price: dbProductPrices.find((x) => x._id === x._id).price,
       _id: undefined,
     }))
+
     const { itemsPrice, taxPrice, shippingPrice, totalPrice } =
       calcPrices(dbOrderItems)
 
@@ -71,4 +73,4 @@ export const POST = auth(async (req: any) => {
       }
     )
   }
-})
+}) as any

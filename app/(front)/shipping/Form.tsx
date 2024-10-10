@@ -1,11 +1,10 @@
 'use client'
-
+import CheckoutSteps from '@/components/CheckoutSteps'
 import useCartService from '@/lib/hooks/useCartStore'
 import { ShippingAddress } from '@/lib/models/OrderModel'
 import { useRouter } from 'next/navigation'
-import { SubmitHandler, useForm, ValidationRule } from 'react-hook-form'
 import { useEffect } from 'react'
-import CheckoutSteps from '@/components/CheckoutSteps'
+import { SubmitHandler, ValidationRule, useForm } from 'react-hook-form'
 
 const Form = () => {
   const router = useRouter()
@@ -37,6 +36,7 @@ const Form = () => {
     saveShippingAddrress(form)
     router.push('/payment')
   }
+
   const FormInput = ({
     id,
     name,
@@ -70,7 +70,6 @@ const Form = () => {
   return (
     <div>
       <CheckoutSteps current={1} />
-
       <div className="max-w-sm mx-auto card bg-base-300 my-4">
         <div className="card-body">
           <h1 className="card-title">Shipping Address</h1>
@@ -98,5 +97,4 @@ const Form = () => {
     </div>
   )
 }
-
 export default Form

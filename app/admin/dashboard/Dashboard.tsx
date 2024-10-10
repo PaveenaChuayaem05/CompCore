@@ -1,9 +1,8 @@
 'use client'
 import Link from 'next/link'
-import React from 'react'
 import { Bar, Doughnut, Line } from 'react-chartjs-2'
 import useSWR from 'swr'
-
+import { formatNumber } from '@/lib/utils'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -17,7 +16,6 @@ import {
   BarElement,
   ArcElement,
 } from 'chart.js'
-import { formatNumber } from '@/lib/utils'
 
 ChartJS.register(
   CategoryScale,
@@ -42,7 +40,7 @@ export const options = {
 }
 
 const Dashboard = () => {
-  const { data: summary, error } = useSWR(`/api/orders/summary`)
+  const { data: summary, error } = useSWR(`/api/admin/orders/summary`)
 
   if (error) return error.message
   if (!summary) return 'Loading...'
@@ -164,7 +162,6 @@ const Dashboard = () => {
         <div>
           <h2 className="text-xl py-2">Products Report</h2>
           <div className="flex items-center justify-center h-80 w-96 ">
-            {' '}
             <Doughnut data={productsData} />
           </div>
         </div>

@@ -1,4 +1,4 @@
-export const CheckoutSteps = ({ current = 0 }) => {
+const CheckoutSteps = ({ current = 0 }) => {
   return (
     <ul className="steps steps-vertical lg:steps-horizontal w-full mt-4">
       {['User Login', 'Shipping Address', 'Payment Method', 'Place Order'].map(

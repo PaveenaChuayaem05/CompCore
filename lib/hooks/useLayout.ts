@@ -22,15 +22,14 @@ export default function useLayoutService() {
   return {
     theme,
     drawerOpen,
-
-    toggleDrawer: () => {
-      layoutStore.setState({
-        drawerOpen: !drawerOpen,
-      })
-    },
     toggleTheme: () => {
       layoutStore.setState({
         theme: theme === 'dark' ? 'light' : 'dark',
+      })
+    },
+    toggleDrawer: () => {
+      layoutStore.setState({
+        drawerOpen: !drawerOpen,
       })
     },
   }

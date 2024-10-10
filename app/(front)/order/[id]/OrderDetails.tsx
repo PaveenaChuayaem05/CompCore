@@ -7,10 +7,14 @@ import toast from 'react-hot-toast'
 import useSWR from 'swr'
 import useSWRMutation from 'swr/mutation'
 
-export default function OrderDetails({ orderId }: { orderId: string }) {
+export default function OrderDetails({
+  orderId,
+}: {
+  orderId: string
+}) {
   const { trigger: deliverOrder, isMutating: isDelivering } = useSWRMutation(
     `/api/orders/${orderId}`,
-    async () => {
+    async (url) => {
       const res = await fetch(`/api/admin/orders/${orderId}/deliver`, {
         method: 'PUT',
         headers: {
@@ -105,7 +109,7 @@ export default function OrderDetails({ orderId }: { orderId: string }) {
                             height={50}
                           ></Image>
                           <span className="px-2">
-                            {item.name} ({item.colors})
+                            {item.name} ({item.color} {item.size})
                           </span>
                         </Link>
                       </td>
@@ -148,8 +152,6 @@ export default function OrderDetails({ orderId }: { orderId: string }) {
                     <div>${totalPrice}</div>
                   </div>
                 </li>
-
-                {/* Removed PayPal Button section */}
 
                 {session?.user.isAdmin && (
                   <li>

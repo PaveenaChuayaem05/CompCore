@@ -2,8 +2,8 @@ import { auth } from '@/lib/auth'
 import dbConnect from '@/lib/dbConnect'
 import OrderModel from '@/lib/models/OrderModel'
 
-export const PUT = auth(async (...request: any) => {
-  const [req, { params }] = request
+export const PUT = auth(async (...args: any) => {
+  const [req, { params }] = args
   if (!req.auth || !req.auth.user?.isAdmin) {
     return Response.json(
       { message: 'unauthorized' },
@@ -24,7 +24,7 @@ export const PUT = auth(async (...request: any) => {
             status: 400,
           }
         )
-      order.isDelivered = !order.isDelivered
+      order.isDelivered = true
       order.deliveredAt = Date.now()
       const updatedOrder = await order.save()
       return Response.json(updatedOrder)

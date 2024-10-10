@@ -1,6 +1,6 @@
 import { auth } from '@/lib/auth'
 import dbConnect from '@/lib/dbConnect'
-import OrderModel from '@/lib/models/OrderModel'
+import UserModel from '@/lib/models/UserModel'
 
 export const GET = auth(async (req: any) => {
   if (!req.auth || !req.auth.user?.isAdmin) {
@@ -12,9 +12,6 @@ export const GET = auth(async (req: any) => {
     )
   }
   await dbConnect()
-  const orders = await OrderModel.find()
-    .sort({ createdAt: -1 })
-    .populate('user', 'name')
-
-  return Response.json(orders)
+  const users = await UserModel.find()
+  return Response.json(users)
 }) as any

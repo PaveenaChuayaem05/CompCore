@@ -1,6 +1,6 @@
 'use client'
-
 import { cartStore } from '@/lib/hooks/useCartStore'
+import useLayoutService from '@/lib/hooks/useLayout'
 import { useEffect } from 'react'
 import toast, { Toaster } from 'react-hot-toast'
 import { SWRConfig } from 'swr'
@@ -10,6 +10,8 @@ export default function ClientProviders({
 }: {
   children: React.ReactNode
 }) {
+  const { theme } = useLayoutService()
+
   const updateStore = () => {
     cartStore.persist.rehydrate()
   }
@@ -22,10 +24,11 @@ export default function ClientProviders({
       window.removeEventListener('focus', updateStore)
     }
   }, [])
+
   return (
     <SWRConfig
       value={{
-        onError: (error, key) => {
+        onError: (error) => {
           toast.error(error.message)
         },
         fetcher: async (resource, init) => {
@@ -37,9 +40,10 @@ export default function ClientProviders({
         },
       }}
     >
-      <Toaster />
-
-      {children}
+      <div data-theme={theme}>
+        <Toaster toastOptions={{ className: 'toaster-con' }} />
+        {children}
+      </div>
     </SWRConfig>
   )
 }

@@ -1,5 +1,3 @@
-// next.config.mjs
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
@@ -12,7 +10,12 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'm.media-amazon.com',
-        pathname: '/images/I/**', // Adjust the pathname if needed based on the image paths you're using
+        pathname: '/images/I/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com', // Add Cloudinary hostname
+        pathname: '/dmgkoilib/image/upload/**', // Ensure this path matches the images you're using
       },
     ],
   },

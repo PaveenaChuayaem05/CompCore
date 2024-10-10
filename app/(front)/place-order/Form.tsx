@@ -1,12 +1,12 @@
 'use client'
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import CheckoutSteps from '@/components/CheckoutSteps'
 import useCartService from '@/lib/hooks/useCartStore'
-import { CheckoutSteps } from '@/components/CheckoutSteps'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import Image from 'next/image'
+import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import useSWRMutation from 'swr/mutation'
+import Image from 'next/image'
 
 const Form = () => {
   const router = useRouter()
@@ -21,10 +21,9 @@ const Form = () => {
     clear,
   } = useCartService()
 
-  // Remove 'url' from the function signature
   const { trigger: placeOrder, isMutating: isPlacing } = useSWRMutation(
     `/api/orders/mine`,
-    async () => {
+    async (url) => {
       const res = await fetch('/api/orders', {
         method: 'POST',
         headers: {
@@ -41,7 +40,6 @@ const Form = () => {
         }),
       })
       const data = await res.json()
-
       if (res.ok) {
         clear()
         toast.success('Order placed successfully')
@@ -51,7 +49,6 @@ const Form = () => {
       }
     }
   )
-
   useEffect(() => {
     if (!paymentMethod) {
       return router.push('/payment')
@@ -90,6 +87,7 @@ const Form = () => {
               </div>
             </div>
           </div>
+
           <div className="card bg-base-300 mt-4">
             <div className="card-body">
               <h2 className="card-title">Payment Method</h2>
@@ -101,10 +99,11 @@ const Form = () => {
               </div>
             </div>
           </div>
+
           <div className="card bg-base-300 mt-4">
             <div className="card-body">
               <h2 className="card-title">Items</h2>
-              <table className="table ">
+              <table className="table">
                 <thead>
                   <tr>
                     <th>Item</th>
@@ -127,7 +126,7 @@ const Form = () => {
                             height={50}
                           ></Image>
                           <span className="px-2">
-                            {item.name}({item.colors})
+                            {item.name}({item.color} {item.size})
                           </span>
                         </Link>
                       </td>
@@ -147,6 +146,7 @@ const Form = () => {
             </div>
           </div>
         </div>
+
         <div>
           <div className="card bg-base-300">
             <div className="card-body">
@@ -197,5 +197,4 @@ const Form = () => {
     </div>
   )
 }
-
 export default Form

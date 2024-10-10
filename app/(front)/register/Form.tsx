@@ -1,9 +1,9 @@
 'use client'
-import { useEffect } from 'react'
-import { useSearchParams, useRouter } from 'next/navigation'
-import Link from 'next/link'
 import { useSession } from 'next-auth/react'
-import { useForm, SubmitHandler } from 'react-hook-form'
+import Link from 'next/link'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useEffect } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
 type Inputs = {
@@ -15,9 +15,9 @@ type Inputs = {
 
 const Form = () => {
   const { data: session } = useSession()
+
   const params = useSearchParams()
   const router = useRouter()
-
   const callbackUrl = params.get('callbackUrl') || '/'
   const {
     register,
@@ -32,7 +32,6 @@ const Form = () => {
       confirmPassword: '',
     },
   })
-
   useEffect(() => {
     if (session && session.user) {
       router.push(callbackUrl)
@@ -70,7 +69,6 @@ const Form = () => {
       toast.error(error || 'error')
     }
   }
-
   return (
     <div className="max-w-sm  mx-auto card bg-base-300 my-4">
       <div className="card-body">
@@ -164,7 +162,6 @@ const Form = () => {
 
         <div className="divider"> </div>
         <div>
-          {' '}
           Already have an account?{' '}
           <Link className="link" href={`/signin?callbackUrl=${callbackUrl}`}>
             Login
